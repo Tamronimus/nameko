@@ -157,6 +157,7 @@ class EventHandler(Consumer):
         self.event_type = event_type
         self.handler_type = handler_type
         self.reliable_delivery = reliable_delivery
+        self.message_ttl = kwargs.pop('message_ttl', None)
 
         super(EventHandler, self).__init__(
             queue=None, requeue_on_error=requeue_on_error, **kwargs
@@ -261,7 +262,7 @@ class EventHandler(Consumer):
 
         self.queue = Queue(
             queue_name, exchange=exchange, routing_key=self.event_type,
-            durable=True, auto_delete=auto_delete, exclusive=exclusive)
+            durable=True, auto_delete=auto_delete, exclusive=exclusive, message_ttl=self.message_ttl)
 
         super(EventHandler, self).setup()
 
